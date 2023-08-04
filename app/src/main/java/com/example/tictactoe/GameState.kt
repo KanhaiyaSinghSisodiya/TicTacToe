@@ -10,7 +10,7 @@ data class GameState(
     var playerCircleCount:Int =0,
     var playerCrossCount: Int = 0,
     var drawCount: Int = 0,
-    val hintText: String = "Player 'O' turn",
+    var hintText: String = "Player 'O' turn",
     val currentTurn: BoardCellValue = BoardCellValue.CIRCLE,
     var victoryType: VictoryType = VictoryType.NONE,
     var hasWon: Boolean = false

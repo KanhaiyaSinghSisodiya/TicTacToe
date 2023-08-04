@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import kotlin.random.Random
 
 class GameViewModel: ViewModel() {
 
@@ -22,7 +23,7 @@ class GameViewModel: ViewModel() {
         9 to BoardCellValue.NONE
     ))
 
-    var k =0;
+    private var k =0;
 
     fun onAction(action: UserAction) {
         when(action) {
@@ -38,9 +39,19 @@ class GameViewModel: ViewModel() {
                     8 to BoardCellValue.NONE,
                     9 to BoardCellValue.NONE
                 )
+                var jk = ""
+                if (state.currentTurn == BoardCellValue.CIRCLE) {
+                    jk = "Player 'O' turn"
+                }
+                else {
+                    jk = "Player 'X' turn"
+                }
+
                 state = state.copy(victoryType = VictoryType.NONE,
-                    hasWon = false
-                    )
+                    hasWon = false,
+
+                    hintText = jk
+                )
                 k=0
             }
             is UserAction.BoardTapped ->
@@ -49,15 +60,21 @@ class GameViewModel: ViewModel() {
                     k++;
                     addValueToBoard(action.cellNumber)
                     if(hasWon()) {
+
                         state.hasWon = true
                         if(boardItem[action.cellNumber] == BoardCellValue.CROSS) {
                             state.playerCrossCount++
+                            state.hintText = "Player 'X' won"
                         }
                         else if(boardItem[action.cellNumber] == BoardCellValue.CIRCLE) {
                             state.playerCircleCount++
+                            state.hintText = "Player 'O' won"
                         }
                     }
-                    else if(k==9)    state.drawCount++
+                    else if(k==9)  {
+                        state.drawCount++
+                        state.hintText = "Draw"
+                    }
                 }
             }
         }
